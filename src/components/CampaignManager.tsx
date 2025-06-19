@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Target, Play, Pause, CheckCircle } from "lucide-react";
+import { Calendar, Target, Play, Pause, CheckCircle, Settings, AlertTriangle, FileCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import DecisionDashboard from "./DecisionDashboard";
 
 interface Executive {
   id: number;
@@ -26,8 +27,16 @@ interface Campaign {
   endDate: string;
   goal: number;
   progress: number;
-  status: 'activa' | 'pausada' | 'completada';
+  status: 'borrador' | 'activa' | 'pausada' | 'completada';
   assignedExecutives: number[];
+  exclusionRules: string[];
+}
+
+interface ExclusionRule {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
 }
 
 const CampaignManager = () => {
@@ -36,6 +45,14 @@ const CampaignManager = () => {
   const [campaignGoal, setCampaignGoal] = useState(200);
   const [campaignType, setCampaignType] = useState<'por_vencer' | 'vencidos'>('por_vencer');
   const [campaignName, setCampaignName] = useState('');
+  const [campaignStatus, setCampaignStatus] = useState<'create' | 'review' | 'active'>('create');
+  const [exclusionRules, setExclusionRules] = useState<ExclusionRule[]>([
+    { id: '1', name: 'Acuerdo Cliente', description: 'Excluir pedidos con etiqueta "Acuerdo Cliente"', enabled: false },
+    { id: '2', name: 'Bajo Valor', description: 'Excluir pedidos menores a $500 MXN', enabled: false },
+    { id: '3', name: 'Cliente VIP Manual', description: 'Enviar pedidos VIP a revisión manual', enabled: false },
+    { id: '4', name: 'Alto Valor', description: 'Revisar pedidos mayores a $50,000 MXN', enabled: false },
+    { id: '5', name: 'Fecha Crítica', description: 'Priorizar pedidos con fecha promesa en 48 hrs', enabled: false }
+  ]);
 
   const executives: Executive[] = [
     { id: 1, name: "María González", email: "maria.g@company.com", available: true },
@@ -60,18 +77,8 @@ const CampaignManager = () => {
       goal: 150,
       progress: 89,
       status: 'activa',
-      assignedExecutives: [1, 2, 3, 4, 5]
-    },
-    {
-      id: "2", 
-      name: "Campaña Pedidos Vencidos - Diciembre",
-      type: 'vencidos',
-      startDate: "2024-06-18",
-      endDate: "2024-06-20",
-      goal: 85,
-      progress: 34,
-      status: 'activa',
-      assignedExecutives: [6, 7, 8]
+      assignedExecutives: [1, 2, 3, 4, 5],
+      exclusionRules: ['1', '2']
     }
   ];
 
@@ -83,7 +90,15 @@ const CampaignManager = () => {
     );
   };
 
-  const handleCreateCampaign = () => {
+  const handleExclusionRuleToggle = (ruleId: string) => {
+    setExclusionRules(prev => 
+      prev.map(rule => 
+        rule.id === ruleId ? { ...rule, enabled: !rule.enabled } : rule
+      )
+    );
+  };
+
+  const handleGenerateReview = () => {
     if (!campaignName || selectedExecutives.length === 0) {
       toast({
         title: "Error",
@@ -94,14 +109,33 @@ const CampaignManager = () => {
     }
 
     toast({
-      title: "Campaña creada exitosamente",
-      description: `Se creó "${campaignName}" con ${selectedExecutives.length} ejecutivos asignados`,
+      title: "Generando listado inteligente",
+      description: "Aplicando reglas de exclusión y análisis...",
+    });
+
+    // Simular procesamiento
+    setTimeout(() => {
+      setCampaignStatus('review');
+      toast({
+        title: "Listado generado",
+        description: "450 pedidos listos, 25 requieren su atención",
+      });
+    }, 2000);
+  };
+
+  const handleConfirmAndActivate = () => {
+    setCampaignStatus('active');
+    toast({
+      title: "Campaña activada exitosamente",
+      description: `"${campaignName}" está ahora activa con ${selectedExecutives.length} ejecutivos`,
     });
 
     // Reset form
     setCampaignName('');
     setSelectedExecutives([]);
     setCampaignGoal(200);
+    setCampaignStatus('create');
+    setExclusionRules(rules => rules.map(rule => ({ ...rule, enabled: false })));
   };
 
   const getCampaignStatusColor = (status: string) => {
@@ -109,6 +143,7 @@ const CampaignManager = () => {
       case 'activa': return 'bg-green-100 text-green-700';
       case 'pausada': return 'bg-yellow-100 text-yellow-700';
       case 'completada': return 'bg-blue-100 text-blue-700';
+      case 'borrador': return 'bg-gray-100 text-gray-700';
       default: return 'bg-gray-100 text-gray-700';
     }
   };
@@ -116,6 +151,10 @@ const CampaignManager = () => {
   const getCampaignTypeColor = (type: string) => {
     return type === 'por_vencer' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700';
   };
+
+  if (campaignStatus === 'review') {
+    return <DecisionDashboard onConfirm={handleConfirmAndActivate} onBack={() => setCampaignStatus('create')} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -128,6 +167,7 @@ const CampaignManager = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+          {/* Configuración Básica */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label htmlFor="campaign-name">Nombre de la Campaña</Label>
@@ -135,7 +175,7 @@ const CampaignManager = () => {
                 id="campaign-name"
                 value={campaignName}
                 onChange={(e) => setCampaignName(e.target.value)}
-                placeholder="Ej: Campaña Enero 2024"
+                placeholder="Ej: Gestión Pedidos Completos - Semana 25"
               />
             </div>
             
@@ -161,6 +201,35 @@ const CampaignManager = () => {
                 onChange={(e) => setCampaignGoal(parseInt(e.target.value) || 0)}
                 min={1}
               />
+            </div>
+          </div>
+
+          {/* Reglas de Exclusión Automática */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Settings className="h-5 w-5 text-blue-600" />
+              <Label className="text-base font-medium">Reglas de Exclusión Automática</Label>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {exclusionRules.map((rule) => (
+                <div key={rule.id} className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-slate-50">
+                  <Checkbox
+                    id={`rule-${rule.id}`}
+                    checked={rule.enabled}
+                    onCheckedChange={() => handleExclusionRuleToggle(rule.id)}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <label 
+                      htmlFor={`rule-${rule.id}`}
+                      className="text-sm font-medium cursor-pointer text-slate-900"
+                    >
+                      {rule.name}
+                    </label>
+                    <p className="text-xs text-slate-500">{rule.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -207,9 +276,9 @@ const CampaignManager = () => {
           </div>
 
           <div className="flex justify-end">
-            <Button onClick={handleCreateCampaign} className="flex items-center gap-2">
-              <Play className="h-4 w-4" />
-              Crear y Activar Campaña
+            <Button onClick={handleGenerateReview} className="flex items-center gap-2">
+              <FileCheck className="h-4 w-4" />
+              Generar y Revisar Listado
             </Button>
           </div>
         </CardContent>
