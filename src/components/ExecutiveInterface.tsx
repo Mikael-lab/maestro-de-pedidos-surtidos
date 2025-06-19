@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,12 +23,18 @@ interface Client {
 
 interface Order {
   id: string;
-  orderNumber: string;
+  number: string;
+  status: 'complete' | 'partial';
+  items: number;
   value: number;
-  dueDate: string;
-  status: 'completo' | 'parcial';
-  positions: number;
-  tags: string[];
+  promiseDate: string;
+  positions: Array<{
+    id: string;
+    product: string;
+    quantity: number;
+    available: number;
+    type: 'stock' | 'over_order';
+  }>;
 }
 
 interface ManagementResult {
@@ -146,161 +153,310 @@ const ExecutiveInterface = () => {
     1: [
       {
         id: 'PED-2024-001',
-        orderNumber: 'PED-2024-001',
+        number: 'PED-2024-001',
+        status: 'complete',
+        items: 3,
         value: 75000,
-        dueDate: '2024-06-20',
-        status: 'completo',
-        positions: 3,
-        tags: []
+        promiseDate: '2024-06-20',
+        positions: [
+          {
+            id: 'pos-1',
+            product: 'Válvula de Control 6"',
+            quantity: 2,
+            available: 2,
+            type: 'stock'
+          },
+          {
+            id: 'pos-2',
+            product: 'Brida ANSI 150',
+            quantity: 4,
+            available: 4,
+            type: 'stock'
+          }
+        ]
       },
       {
         id: 'PED-2024-002',
-        orderNumber: 'PED-2024-002',
+        number: 'PED-2024-002',
+        status: 'partial',
+        items: 2,
         value: 50000,
-        dueDate: '2024-06-22',
-        status: 'parcial',
-        positions: 2,
-        tags: ['Urgente']
+        promiseDate: '2024-06-22',
+        positions: [
+          {
+            id: 'pos-3',
+            product: 'Bomba Centrifuga 5HP',
+            quantity: 1,
+            available: 0,
+            type: 'over_order'
+          },
+          {
+            id: 'pos-4',
+            product: 'Motor Eléctrico',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       }
     ],
     2: [
       {
         id: 'PED-2024-003',
-        orderNumber: 'PED-2024-003',
+        number: 'PED-2024-003',
+        status: 'complete',
+        items: 1,
         value: 45000,
-        dueDate: '2024-06-21',
-        status: 'completo',
-        positions: 1,
-        tags: []
+        promiseDate: '2024-06-21',
+        positions: [
+          {
+            id: 'pos-5',
+            product: 'Transformador 220V',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       }
     ],
     3: [
       {
         id: 'PED-2024-004',
-        orderNumber: 'PED-2024-004',
+        number: 'PED-2024-004',
+        status: 'complete',
+        items: 4,
         value: 60000,
-        dueDate: '2024-06-23',
-        status: 'completo',
-        positions: 4,
-        tags: []
+        promiseDate: '2024-06-23',
+        positions: [
+          {
+            id: 'pos-6',
+            product: 'Tubo de Acero 4"',
+            quantity: 10,
+            available: 10,
+            type: 'stock'
+          },
+          {
+            id: 'pos-7',
+            product: 'Soldadura Especial',
+            quantity: 5,
+            available: 5,
+            type: 'stock'
+          }
+        ]
       }
     ],
     4: [
       {
         id: 'PED-2024-005',
-        orderNumber: 'PED-2024-005',
+        number: 'PED-2024-005',
+        status: 'partial',
+        items: 2,
         value: 35000,
-        dueDate: '2024-06-24',
-        status: 'parcial',
-        positions: 2,
-        tags: ['Urgente']
+        promiseDate: '2024-06-24',
+        positions: [
+          {
+            id: 'pos-8',
+            product: 'Filtro Industrial',
+            quantity: 2,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       },
       {
         id: 'PED-2024-006',
-        orderNumber: 'PED-2024-006',
+        number: 'PED-2024-006',
+        status: 'partial',
+        items: 3,
         value: 40000,
-        dueDate: '2024-06-25',
-        status: 'parcial',
-        positions: 3,
-        tags: ['Urgente']
+        promiseDate: '2024-06-25',
+        positions: [
+          {
+            id: 'pos-9',
+            product: 'Sensor de Presión',
+            quantity: 3,
+            available: 2,
+            type: 'over_order'
+          }
+        ]
       },
       {
         id: 'PED-2024-007',
-        orderNumber: 'PED-2024-007',
+        number: 'PED-2024-007',
+        status: 'complete',
+        items: 5,
         value: 75000,
-        dueDate: '2024-06-26',
-        status: 'completo',
-        positions: 5,
-        tags: []
+        promiseDate: '2024-06-26',
+        positions: [
+          {
+            id: 'pos-10',
+            product: 'Controlador PLC',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       },
       {
         id: 'PED-2024-008',
-        orderNumber: 'PED-2024-008',
+        number: 'PED-2024-008',
+        status: 'complete',
+        items: 4,
         value: 50000,
-        dueDate: '2024-06-27',
-        status: 'completo',
-        positions: 4,
-        tags: []
+        promiseDate: '2024-06-27',
+        positions: [
+          {
+            id: 'pos-11',
+            product: 'Cable de Control',
+            quantity: 100,
+            available: 100,
+            type: 'stock'
+          }
+        ]
       }
     ],
     5: [
       {
         id: 'PED-2024-009',
-        orderNumber: 'PED-2024-009',
+        number: 'PED-2024-009',
+        status: 'complete',
+        items: 3,
         value: 40000,
-        dueDate: '2024-06-28',
-        status: 'completo',
-        positions: 3,
-        tags: []
+        promiseDate: '2024-06-28',
+        positions: [
+          {
+            id: 'pos-12',
+            product: 'Medidor de Flujo',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       },
       {
         id: 'PED-2024-010',
-        orderNumber: 'PED-2024-010',
+        number: 'PED-2024-010',
+        status: 'complete',
+        items: 4,
         value: 50000,
-        dueDate: '2024-06-29',
-        status: 'completo',
-        positions: 4,
-        tags: []
+        promiseDate: '2024-06-29',
+        positions: [
+          {
+            id: 'pos-13',
+            product: 'Regulador de Presión',
+            quantity: 2,
+            available: 2,
+            type: 'stock'
+          }
+        ]
       }
     ],
     6: [
       {
         id: 'PED-2024-011',
-        orderNumber: 'PED-2024-011',
+        number: 'PED-2024-011',
+        status: 'partial',
+        items: 2,
         value: 30000,
-        dueDate: '2024-06-30',
-        status: 'parcial',
-        positions: 2,
-        tags: ['Urgente']
+        promiseDate: '2024-06-30',
+        positions: [
+          {
+            id: 'pos-14',
+            product: 'Válvula de Seguridad',
+            quantity: 1,
+            available: 0,
+            type: 'over_order'
+          }
+        ]
       },
       {
         id: 'PED-2024-012',
-        orderNumber: 'PED-2024-012',
+        number: 'PED-2024-012',
+        status: 'complete',
+        items: 5,
         value: 80000,
-        dueDate: '2024-07-01',
-        status: 'completo',
-        positions: 5,
-        tags: []
+        promiseDate: '2024-07-01',
+        positions: [
+          {
+            id: 'pos-15',
+            product: 'Compresor de Aire',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       },
       {
         id: 'PED-2024-013',
-        orderNumber: 'PED-2024-013',
+        number: 'PED-2024-013',
+        status: 'complete',
+        items: 4,
         value: 60000,
-        dueDate: '2024-07-02',
-        status: 'completo',
-        positions: 4,
-        tags: []
+        promiseDate: '2024-07-02',
+        positions: [
+          {
+            id: 'pos-16',
+            product: 'Intercambiador de Calor',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       }
     ],
     7: [
       {
         id: 'PED-2024-014',
-        orderNumber: 'PED-2024-014',
+        number: 'PED-2024-014',
+        status: 'complete',
+        items: 5,
         value: 70000,
-        dueDate: '2024-07-03',
-        status: 'completo',
-        positions: 5,
-        tags: []
+        promiseDate: '2024-07-03',
+        positions: [
+          {
+            id: 'pos-17',
+            product: 'Turbina de Vapor',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       }
     ],
     8: [
       {
         id: 'PED-2024-015',
-        orderNumber: 'PED-2024-015',
+        number: 'PED-2024-015',
+        status: 'partial',
+        items: 3,
         value: 45000,
-        dueDate: '2024-07-04',
-        status: 'parcial',
-        positions: 3,
-        tags: ['Urgente']
+        promiseDate: '2024-07-04',
+        positions: [
+          {
+            id: 'pos-18',
+            product: 'Generador Eléctrico',
+            quantity: 1,
+            available: 0,
+            type: 'over_order'
+          }
+        ]
       },
       {
         id: 'PED-2024-016',
-        orderNumber: 'PED-2024-016',
+        number: 'PED-2024-016',
+        status: 'complete',
+        items: 4,
         value: 50000,
-        dueDate: '2024-07-05',
-        status: 'completo',
-        positions: 4,
-        tags: []
+        promiseDate: '2024-07-05',
+        positions: [
+          {
+            id: 'pos-19',
+            product: 'Panel de Control',
+            quantity: 1,
+            available: 1,
+            type: 'stock'
+          }
+        ]
       }
     ]
   };
@@ -361,11 +517,11 @@ const ExecutiveInterface = () => {
   };
 
   const getStatusColor = (status: string) => {
-    return status === 'completo' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+    return status === 'complete' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
   };
 
   const getStatusText = (status: string) => {
-    return status === 'completo' ? 'Completo' : 'Parcial';
+    return status === 'complete' ? 'Completo' : 'Parcial';
   };
 
   return (
@@ -455,19 +611,14 @@ const ExecutiveInterface = () => {
                     >
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
-                          <h4 className="font-medium text-slate-800">{order.orderNumber}</h4>
+                          <h4 className="font-medium text-slate-800">{order.number}</h4>
                           <div className="flex items-center gap-2">
                             <Badge className={getStatusColor(order.status)}>
                               {getStatusText(order.status)}
                             </Badge>
                             <span className="text-xs text-slate-500">
-                              {order.positions} posición{order.positions > 1 ? 'es' : ''}
+                              {order.items} artículo{order.items > 1 ? 's' : ''}
                             </span>
-                            {order.tags.map((tag, index) => (
-                              <Badge key={index} variant="outline" className="text-xs">
-                                {tag}
-                              </Badge>
-                            ))}
                           </div>
                         </div>
                         <div className="text-right">
@@ -475,7 +626,7 @@ const ExecutiveInterface = () => {
                             ${order.value.toLocaleString()} MXN
                           </div>
                           <div className="text-xs text-slate-500">
-                            Vence: {order.dueDate}
+                            Vence: {order.promiseDate}
                           </div>
                         </div>
                       </div>
@@ -488,12 +639,11 @@ const ExecutiveInterface = () => {
         </CardContent>
       </Card>
 
-      {/* Modal de Detalle de Orden con Gestión */}
+      {/* Modal de Detalle de Orden */}
       <OrderDetailModal 
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
         order={selectedOrder}
-        onManage={() => {}} // Keep existing functionality
       />
 
       {/* Panel de Registro de Gestión (cuando se abre el modal) */}
