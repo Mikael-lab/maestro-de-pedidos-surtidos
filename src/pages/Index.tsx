@@ -5,10 +5,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PedidosIndicator from "@/components/PedidosIndicator";
 import AdminPanel from "@/components/AdminPanel";
 import ExecutiveInterface from "@/components/ExecutiveInterface";
+import CampaignManager from "@/components/CampaignManager";
+import ExecutiveStatusView from "@/components/ExecutiveStatusView";
 import { Badge } from "@/components/ui/badge";
+import { Clock, AlertTriangle, Users } from "lucide-react";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [showExecutiveStatus, setShowExecutiveStatus] = useState(false);
+
+  // Mock data para los indicadores
+  const pedidosPorVencer = 847;
+  const pedidosVencidos = 400;
+  const ejecutivosActivos = 8;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -36,12 +45,15 @@ const Index = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
             <TabsTrigger value="dashboard" className="text-sm font-medium">
               Dashboard Principal
             </TabsTrigger>
+            <TabsTrigger value="campaigns" className="text-sm font-medium">
+              Gestión de Campañas
+            </TabsTrigger>
             <TabsTrigger value="admin" className="text-sm font-medium">
-              Administración
+              Configuración
             </TabsTrigger>
             <TabsTrigger value="executive" className="text-sm font-medium">
               Vista Ejecutivos
@@ -50,35 +62,53 @@ const Index = () => {
 
           <TabsContent value="dashboard" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card>
+              <Card className="cursor-pointer hover:shadow-md transition-shadow">
                 <CardHeader>
-                  <CardTitle className="text-lg text-slate-700">Pedidos Totales</CardTitle>
+                  <CardTitle className="text-lg text-slate-700 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-yellow-600" />
+                    Pedidos por Vencer
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-slate-900">1,247</div>
-                  <p className="text-sm text-slate-500">+12% vs mes anterior</p>
+                  <div className="text-3xl font-bold text-yellow-600">{pedidosPorVencer.toLocaleString()}</div>
+                  <p className="text-sm text-slate-500">Con fecha promesa próxima</p>
                 </CardContent>
               </Card>
-              <Card>
+              
+              <Card className="cursor-pointer hover:shadow-md transition-shadow">
                 <CardHeader>
-                  <CardTitle className="text-lg text-slate-700">Ejecutivos Activos</CardTitle>
+                  <CardTitle className="text-lg text-slate-700 flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    Pedidos Vencidos
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-600">8/10</div>
+                  <div className="text-3xl font-bold text-red-600">{pedidosVencidos.toLocaleString()}</div>
+                  <p className="text-sm text-slate-500">Fecha promesa vencida</p>
+                </CardContent>
+              </Card>
+              
+              <Card 
+                className="cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => setShowExecutiveStatus(true)}
+              >
+                <CardHeader>
+                  <CardTitle className="text-lg text-slate-700 flex items-center gap-2">
+                    <Users className="h-5 w-5 text-blue-600" />
+                    Ejecutivos Activos
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-blue-600">{ejecutivosActivos}/10</div>
                   <p className="text-sm text-slate-500">Disponibles hoy</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg text-slate-700">Objetivo Campaña</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-green-600">67%</div>
-                  <p className="text-sm text-slate-500">134/200 entregas</p>
                 </CardContent>
               </Card>
             </div>
             <PedidosIndicator />
+          </TabsContent>
+
+          <TabsContent value="campaigns" className="space-y-6">
+            <CampaignManager />
           </TabsContent>
 
           <TabsContent value="admin" className="space-y-6">
@@ -90,6 +120,12 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Executive Status Modal */}
+      <ExecutiveStatusView 
+        isOpen={showExecutiveStatus}
+        onClose={() => setShowExecutiveStatus(false)}
+      />
     </div>
   );
 };
