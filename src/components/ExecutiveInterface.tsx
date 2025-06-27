@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -77,8 +76,8 @@ const ExecutiveInterface = () => {
   const assignedClients: Client[] = [
     {
       id: 1,
-      name: "PEMEX S.A. de C.V.",
-      contact: "Ing. Roberto Méndez",
+      name: "Constructora Delta S.A.",
+      contact: "Arq. Roberto Méndez",
       phone: "+52 55 1234-5678",
       ordersCount: 3,
       totalValue: 125000,
@@ -86,8 +85,8 @@ const ExecutiveInterface = () => {
     },
     {
       id: 2,
-      name: "CFE Suministrador",
-      contact: "Lic. Ana Torres",
+      name: "Pisos y Acabados Premium",
+      contact: "Ing. Ana Torres",
       phone: "+52 55 2345-6789",
       ordersCount: 2,
       totalValue: 85000,
@@ -95,8 +94,8 @@ const ExecutiveInterface = () => {
     },
     {
       id: 3,
-      name: "Grupo Carso",
-      contact: "Arq. Carlos Slim",
+      name: "Grupo Constructor Moderno",
+      contact: "Arq. Carlos Ramírez",
       phone: "+52 55 3456-7890",
       ordersCount: 1,
       totalValue: 60000,
@@ -104,7 +103,7 @@ const ExecutiveInterface = () => {
     },
     {
       id: 4,
-      name: "Arca Continental",
+      name: "Remodelaciones Integrales",
       contact: "Srita. Laura García",
       phone: "+52 81 4567-8901",
       ordersCount: 4,
@@ -113,7 +112,7 @@ const ExecutiveInterface = () => {
     },
     {
       id: 5,
-      name: "Gruma S.A.B.",
+      name: "Baños y Cocinas S.A.",
       contact: "Sr. Juan González",
       phone: "+52 55 5678-9012",
       ordersCount: 2,
@@ -122,7 +121,7 @@ const ExecutiveInterface = () => {
     },
     {
       id: 6,
-      name: "Kimberly-Clark",
+      name: "Materiales Cerámicos del Norte",
       contact: "Lic. Patricia López",
       phone: "+52 55 6789-0123",
       ordersCount: 3,
@@ -131,7 +130,7 @@ const ExecutiveInterface = () => {
     },
     {
       id: 7,
-      name: "Femsa S.A. de C.V.",
+      name: "Adhesivos Profesionales",
       contact: "Ing. Miguel Ángel",
       phone: "+52 81 7890-1234",
       ordersCount: 1,
@@ -140,7 +139,7 @@ const ExecutiveInterface = () => {
     },
     {
       id: 8,
-      name: "Grupo Bimbo",
+      name: "Sanitarios Premium",
       contact: "Srita. Sofía Pérez",
       phone: "+52 55 8901-2345",
       ordersCount: 2,
@@ -161,16 +160,16 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-1',
-            product: 'Válvula de Control 6"',
-            quantity: 2,
-            available: 2,
+            product: 'Piso Cerámico 60x60 Mármol Carrara',
+            quantity: 50,
+            available: 50,
             type: 'stock'
           },
           {
             id: 'pos-2',
-            product: 'Brida ANSI 150',
-            quantity: 4,
-            available: 4,
+            product: 'Adhesivo para Cerámica Mapei Kerabond',
+            quantity: 20,
+            available: 20,
             type: 'stock'
           }
         ]
@@ -185,16 +184,16 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-3',
-            product: 'Bomba Centrifuga 5HP',
-            quantity: 1,
-            available: 0,
+            product: 'Piso Porcelanato 80x80 Concreto',
+            quantity: 30,
+            available: 15,
             type: 'over_order'
           },
           {
             id: 'pos-4',
-            product: 'Motor Eléctrico',
-            quantity: 1,
-            available: 1,
+            product: 'Sellador de Juntas Weber Color',
+            quantity: 10,
+            available: 10,
             type: 'stock'
           }
         ]
@@ -211,9 +210,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-5',
-            product: 'Transformador 220V',
-            quantity: 1,
-            available: 1,
+            product: 'Piso Laminado Roble Europeo 8mm',
+            quantity: 100,
+            available: 100,
             type: 'stock'
           }
         ]
@@ -230,16 +229,16 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-6',
-            product: 'Tubo de Acero 4"',
-            quantity: 10,
-            available: 10,
+            product: 'Cerámica Antideslizante 30x30',
+            quantity: 80,
+            available: 80,
             type: 'stock'
           },
           {
             id: 'pos-7',
-            product: 'Soldadura Especial',
-            quantity: 5,
-            available: 5,
+            product: 'Adhesivo Flexible Sika CeraFlex',
+            quantity: 15,
+            available: 15,
             type: 'stock'
           }
         ]
@@ -256,9 +255,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-8',
-            product: 'Filtro Industrial',
-            quantity: 2,
-            available: 1,
+            product: 'Inodoro Elongado Dual Flush',
+            quantity: 5,
+            available: 3,
             type: 'stock'
           }
         ]
@@ -273,8 +272,8 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-9',
-            product: 'Sensor de Presión',
-            quantity: 3,
+            product: 'Lavabo Suspendido Moderno',
+            quantity: 4,
             available: 2,
             type: 'over_order'
           }
@@ -290,9 +289,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-10',
-            product: 'Controlador PLC',
-            quantity: 1,
-            available: 1,
+            product: 'Grifería Monomando Cocina',
+            quantity: 8,
+            available: 8,
             type: 'stock'
           }
         ]
@@ -307,9 +306,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-11',
-            product: 'Cable de Control',
-            quantity: 100,
-            available: 100,
+            product: 'Mampara Templada para Baño',
+            quantity: 3,
+            available: 3,
             type: 'stock'
           }
         ]
@@ -326,7 +325,7 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-12',
-            product: 'Medidor de Flujo',
+            product: 'Tina de Hidromasaje 170x75',
             quantity: 1,
             available: 1,
             type: 'stock'
@@ -343,9 +342,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-13',
-            product: 'Regulador de Presión',
-            quantity: 2,
-            available: 2,
+            product: 'Regadera Tipo Lluvia 20cm',
+            quantity: 6,
+            available: 6,
             type: 'stock'
           }
         ]
@@ -362,9 +361,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-14',
-            product: 'Válvula de Seguridad',
-            quantity: 1,
-            available: 0,
+            product: 'Azulejo Subway 7.5x15 Blanco',
+            quantity: 120,
+            available: 60,
             type: 'over_order'
           }
         ]
@@ -379,9 +378,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-15',
-            product: 'Compresor de Aire',
-            quantity: 1,
-            available: 1,
+            product: 'Mosaico Veneciano Dorado',
+            quantity: 25,
+            available: 25,
             type: 'stock'
           }
         ]
@@ -396,9 +395,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-16',
-            product: 'Intercambiador de Calor',
-            quantity: 1,
-            available: 1,
+            product: 'Cemento Cola Premium Blanco',
+            quantity: 40,
+            available: 40,
             type: 'stock'
           }
         ]
@@ -415,9 +414,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-17',
-            product: 'Turbina de Vapor',
-            quantity: 1,
-            available: 1,
+            product: 'Adhesivo Estructural Epoxico',
+            quantity: 30,
+            available: 30,
             type: 'stock'
           }
         ]
@@ -434,9 +433,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-18',
-            product: 'Generador Eléctrico',
-            quantity: 1,
-            available: 0,
+            product: 'Bidet Suspendido Blanco',
+            quantity: 3,
+            available: 1,
             type: 'over_order'
           }
         ]
@@ -451,9 +450,9 @@ const ExecutiveInterface = () => {
         positions: [
           {
             id: 'pos-19',
-            product: 'Panel de Control',
-            quantity: 1,
-            available: 1,
+            product: 'Espejo con Luz LED Integrada',
+            quantity: 4,
+            available: 4,
             type: 'stock'
           }
         ]
